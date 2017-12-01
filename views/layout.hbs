@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.css"  media="screen,projection"/>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body class="darkbgr">
+    {{{body}}}
+    <!--Import jQuery before materialize.js-->
+      <script src="javascripts\jquery.js"></script>
+      <script src="javascripts\materialize.js"></script>
+      <script type="text/javascript">
+        var $loading = $('#loading').hide();
+        var $titulo = $('#titulo').show();
+        //Attach the event handler to any element
+        $(document).ajaxStart(function () {
+          //ajax request went so show the loading image
+          $titulo.hide();
+          $loading.show();
+        }).ajaxStop(function () {
+          //got response so hide the loading image
+          $loading.hide();
+          $titulo.show();
+        });
+      </script>
+  </body>
+</html>

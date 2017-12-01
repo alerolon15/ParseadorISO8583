@@ -1,0 +1,107 @@
+<div class="container">
+  <h1 id="titulo" style="margin: 0 auto; height:250px; color:#26a69a;" class="valign-wrapper center-align">Parseador ISO 8586 R4 - LINK</h1>
+  <div class="row" style="margin-bottom:0px;">
+    <div id="loading" class="col s4 offset-s4">
+      <img style="margin: 0;" src="\images\Double Ring.gif" />
+      <h5 style="margin-left: 46px; position:relative; bottom:130px;">Cargando</h5>
+    </div>
+  </div>
+  <form action="/" autocomplete="off" method="POST">
+    <div class="row">
+      <div class="input-field col s10">
+        <i class="material-icons prefix">code</i>
+        <input name="ISO" id="msgISO" type="text" class="validate" value="{{body.ISO}}">
+        <label for="ISO">Ingrese una ISO</label>
+        {{{error}}}
+        <div id="errores"></div>
+      </div>
+      <button class="waves-effect waves-light btn" id="Parsear" style="margin-top: 25px;" type="submit">Parsear</button>
+    </div>
+      <div class="row">
+        <div class="col s2" style="margin-top:12px;padding-left:0px;">
+          <h5>Enviar ISO:</h5>
+        </div>
+        <div class="input-field col s3">
+          <i class="material-icons prefix">timeline</i>
+          <input name="IP" id="IP" type="text" class="validate" value="{{body.IP}}">
+          <label for="IP">Ingrese una IP</label>
+        </div>
+        <div class="input-field col s3">
+          <i class="material-icons prefix">timeline</i>
+          <input name="Puerto" id="Puerto" type="text" class="validate" value="{{body.Puerto}}">
+          <label for="Puerto">Ingrese un puerto</label>
+        </div>
+        <div class="">
+          <p>
+            <input name="group1" type="radio" id="test1" checked/>
+            <label for="test1">TCPP</label>
+          </p>
+          <p>
+            <input name="group1" type="radio" id="test2" />
+            <label for="test2">TCP</label>
+          </p>
+        </div>
+      </div>
+  </form>
+  <button class="waves-effect waves-light btn right" id="Enviar" style="bottom: 80px" onclick="Enviar()">Enviar</button>
+  {{#if ISO}}
+  {{{ Success }}}
+  <div class="row" id="bloque">
+    <div class="col s12">
+      <table class="bordered responsive-table striped">
+          <thead>
+            <tr>
+                <th class="col s1" style="padding: 5px 5px;">Campo</th>
+                <th class="col s8" style="padding: 5px 3px;">Valor</th>
+                <th class="col s1" style="padding: 5px 3px;">Longitud <br>(Fijo o Variable)</th>
+                <th class="col s2" style="padding: 5px 3px;">Descripcion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each ISO.Campos }}
+              <tr>
+                <td class="col s1" style="padding: 12px 5px;">{{ this.Campo }}</td>
+                <td class="col s8" style="padding: 5px 3px;"><input style="height: 2rem;width: 80%;font-size: 0.9rem;margin: 0 0 0px 0;" name="ISO" type="text" class="validate" value="'{{{ this.Valor }}}'"></td>
+                <td class="col s1" style="padding: 12px 3px;">{{ this.Longitud }} ({{this.tipo}}) </td>
+                <td class="col s2" style="padding: 12px 3px;">{{{ this.Descripcion }}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {{/if}}
+</div>
+<script type="text/javascript">
+      function Enviar() {
+        var direccion = "/Enviar"
+        var iso = document.getElementById('msgISO').value;
+        var ip = document.getElementById('IP').value;
+        var puerto = document.getElementById('Puerto').value;
+        var tcpp = document.getElementsByName('group1')[0].checked;
+        $.ajax(
+          {
+            url: direccion,
+            type: 'POST',
+            data: { ISO: iso , IP: ip, Puerto: puerto, TCPP: tcpp },
+            success: function(result){
+              if(result) {
+                if(result.error) {
+                  document.getElementById('errores').innerHTML = document.getElementById('errores').innerHTML + result.error;
+                }else {
+                  document.getElementById('msgISO').value = result.ISO;
+
+                  document.getElementById('Parsear').click();
+                }
+              };
+            },
+            error: function(excepcion){
+                alert('error');
+                console.log(excepcion);
+            }
+        });
+      };
+      function Cerrar() {
+        document.getElementById('errores').innerHTML = "";
+      };
+    </script>

@@ -1,0 +1,15 @@
+body {
+  padding: 30px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.darkbgr {
+  background-color: #fefefe!important;
+}
+.recuadro {
+  padding: 10px;
+}
