@@ -1,7 +1,12 @@
-module.exports = function ParsearISO(iso) {
+/* Modelo de la Clase ISO8583 Release 4 */
+/* Este modelo fue hecho para parsear Mensajes tipo ISO8583 para la red financiera LINK */
 
+module.exports = function ParsearISO(iso) {
+	// recibe una ISO y devuelve un JSON con todos los campos presentes en la ISO y sus valores con sus longitudes
 	var ISO = iso;
 	var strCamposISO = ISO.substring(32);
+
+	// diccionario de longitudes (pueden ser variables o fijos) con una descripcion de algunos campos.
 	var _CamposISO = {
 			"ISO" : [
 					{ "Campo" : "F1", "longitud" : 16, "variable" : false, "Descripcion" : "Secondary Bitmap" },
@@ -136,6 +141,8 @@ module.exports = function ParsearISO(iso) {
 
 	var Campos = [];
 
+	// Toma los valores del Header del Mensaje y los agrega al JSON
+  // Estos campos siempre son de longitud fija
 	var H1 = ISO.substr(0,3);
 	var H2 = ISO.substr(3,9);
 	var H3 = ISO.substr(12,4);
@@ -148,11 +155,11 @@ module.exports = function ParsearISO(iso) {
 	Campos.push({ Campo: "H3", Valor : H3 , Longitud : 4, tipo : "F", "Descripcion" : "Tipo de Mensaje" });
 	Campos.push({ Campo: "H4", Valor : H4 , Longitud : 16, tipo : "F", "Descripcion" : "PrimaryBitmap" });
 
-
-
+	// tomamos ambos bitmaps Primario y secundario y buscamos cuales son los campos presentes en el mensaje recibido
 	var Bitmaps = parsearHexa(BitMap, 0);
 
 	var index = 0;
+
 	// rellenamos campos con los valores de la ISO
 	Bitmaps.forEach( function(campo) {
 		_CamposISO.ISO.forEach(function(dicCampo) {
@@ -190,14 +197,15 @@ module.exports = function ParsearISO(iso) {
 
 };
 
-
+// funcion para rellenar con 0 valores HEXA de los bitmaps
 function pad(n, width, z) {
         z = z || '0';
         n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
-function parsearHexa(bitmap, indexBit) {
 
+// funcion que recibe los bitmaps en HEXA y retorna una array con los campos presentes
+function parsearHexa(bitmap, indexBit) {
   var inner = [];
   var CampoSi = "";
   var bitMapVal = bitmap;
