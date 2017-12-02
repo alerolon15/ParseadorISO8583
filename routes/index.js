@@ -17,11 +17,10 @@ router.post('/', function(req, res, next) {
 
   // si el input esta vacio devuelve error
   if (iso == "") {
-    res.render('index', { error: '<div class="card-panel red darken-2" onclick="Cerrar()" style="color: rgba(255, 255, 255, 0.9);"><span>No ingreso Ninguna ISO</span><i class="material-icons right">close</i></div>' })
+    res.render('index', { error: '<div class="card-panel red darken-2" style="color: rgba(255, 255, 255, 0.9);"><span>No ingreso Ninguna ISO</span><i class="material-icons right" onclick="Cerrar()">close</i></div>' })
   }else{
     // convierte la ISO a json y lo devuelve a la vista
     var isoParseado = new Parseador(iso);
-
     res.render('index', { ISO: isoParseado, body: req.body });
   }
 });
@@ -36,7 +35,7 @@ router.post('/Enviar', function(req, res, next) {
   // si los datos del form vienen vacios devuelve un error a la vista
   if (!iso || !ip || !puerto) {
     console.log("Entré!");
-    res.send({ error: '<div class="card-panel red darken-2" onclick="Cerrar()" style="color: rgba(255, 255, 255, 0.9);"><span>Faltan datos para la emulacion!</span><i class="material-icons right">close</i></div>' });
+    res.send({ error: '<div class="card-panel red darken-2" style="color: rgba(255, 255, 255, 0.9);"><span>Faltan datos para la emulacion!</span><i class="material-icons right" onclick="Cerrar()">close</i></div>' });
   }else{
     var isoParseado = new Parseador(iso);
 
@@ -75,7 +74,7 @@ router.post('/Enviar', function(req, res, next) {
       console.log(data);
       // si se recibe un codigo de error especifico se devuelve a la vista el codigo con un mensaje de error de falla de conexion
       if (data.code) {
-        res.send({ error: '<div class="card-panel red darken-2" onclick="Cerrar()" style="color: rgba(255, 255, 255, 0.9);"><span>Algo Salió Mal: no se pudo conectar a la ip y puerto establecida. Error: ' + data.code + '</span><i class="material-icons right">close</i></div>' })
+        res.send({ error: '<div class="card-panel red darken-2" style="color: rgba(255, 255, 255, 0.9);"><span>Algo Salió Mal: no se pudo conectar a la ip y puerto establecida. Error: ' + data.code + '</span><i class="material-icons right" onclick="Cerrar()">close</i></div>' })
       }
     });
 
